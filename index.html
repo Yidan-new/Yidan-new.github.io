@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐾 豆豆 DouDou 的專屬身分證 | 寵物數位身份證</title>
+<style>
+  :root{
+    --primary:#ff8a3d;
+    --primary-dark:#e56f1f;
+    --primary-light:#fff3e8;
+    --accent:#4a9e6b;
+    --accent-light:#eaf6ef;
+    --danger:#e05050;
+    --danger-light:#fdeaea;
+    --ink:#3a3226;
+    --muted:#8a7f6f;
+    --card:#ffffff;
+    --bg:#fdf8f1;
+    --shadow:0 8px 24px rgba(90,60,20,.08);
+    --radius:20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.7;
+    padding-bottom:70px;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:0 16px;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:linear-gradient(160deg,#ffb377,#ff8a3d 55%,#f2702f);
+    border-radius:0 0 36px 36px;
+    padding:38px 20px 64px;
+    text-align:center;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before,.hero::after{
+    content:"🐾";position:absolute;font-size:70px;opacity:.14;
+  }
+  .hero::before{top:14px;left:10px;transform:rotate(-20deg);}
+  .hero::after{bottom:30px;right:16px;transform:rotate(25deg);}
+  .badge-qr{
+    display:inline-block;background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.45);
+    border-radius:999px;padding:5px 16px;font-size:12.5px;
+    letter-spacing:1px;margin-bottom:16px;
+  }
+  .avatar{
+    width:110px;height:110px;border-radius:50%;
+    background:#fff;margin:0 auto 12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:62px;box-shadow:0 10px 26px rgba(0,0,0,.18);
+    border:5px solid rgba(255,255,255,.55);
+  }
+  .hero h1{font-size:26px;font-weight:800;letter-spacing:1px;text-shadow:0 2px 6px rgba(0,0,0,.12);}
+  .hero .tags{margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .tag{
+    background:rgba(255,255,255,.24);border-radius:999px;
+    padding:4px 14px;font-size:14px;font-weight:600;
+  }
+
+  /* ---------- Lost banner ---------- */
+  .card{
+    background:var(--card);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:22px;margin-top:-42px;position:relative;
+  }
+  .lost-banner{
+    border-radius:16px;padding:16px 18px;margin-bottom:14px;
+    background:var(--danger-light);border:2px dashed var(--danger);
+    transition:all .3s ease;
+  }
+  .lost-banner.active{background:#ffe0e0;border-style:solid;}
+  .lost-banner .lb-title{color:var(--danger);font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;}
+  .lost-banner .lb-sub{color:#a55;font-size:13px;margin-top:4px;}
+  .lost-banner.active .lb-sub{color:#c22;}
+  .lb-btn{
+    display:inline-block;margin-top:10px;width:100%;
+    background:var(--danger);color:#fff;border:none;cursor:pointer;
+    font-size:16px;font-weight:700;padding:13px;border-radius:12px;
+    text-decoration:none;text-align:center;
+    box-shadow:0 6px 14px rgba(224,80,80,.35);
+  }
+  .lb-btn:hover{background:#c73d3d;}
+  .call-btn{display:none;margin-top:10px;width:100%;background:var(--danger);color:#fff;
+    font-size:16px;font-weight:700;padding:13px;border-radius:12px;text-align:center;
+    text-decoration:none;box-shadow:0 6px 14px rgba(224,80,80,.35);}
+  .lost-banner.active .lb-btn{display:none;}
+  .lost-banner.active .call-btn{display:block;}
+
+  /* ---------- Sections ---------- */
+  .section{margin-top:22px;}
+  .sec-title{
+    display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  }
+  .sec-title .icon{
+    width:34px;height:34px;border-radius:10px;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+  }
+  .sec-title h2{font-size:18px;font-weight:800;}
+  .sec-title .en{font-size:12px;color:var(--muted);font-weight:500;margin-left:auto;}
+  .info-table{width:100%;border-collapse:collapse;}
+  .info-table tr{border-bottom:1px dashed #eee2d2;}
+  .info-table tr:last-child{border-bottom:none;}
+  .info-table th{
+    text-align:left;width:110px;padding:12px 8px 12px 0;
+    color:var(--muted);font-size:14px;font-weight:600;vertical-align:top;
+  }
+  .info-table td{padding:12px 0;font-size:15px;font-weight:600;}
+  .chip-no{font-family:"Courier New",monospace;letter-spacing:1px;color:var(--primary-dark);}
+
+  .note-box{
+    background:var(--primary-light);border-radius:14px;padding:16px 18px;
+    font-size:14.5px;
+  }
+  .note-box .quote-mark{color:var(--primary);font-size:20px;font-weight:800;}
+
+  .health-grid{display:grid;gap:12px;}
+  .health-item{
+    background:var(--accent-light);border-radius:14px;padding:14px 16px;
+  }
+  .health-item .h-label{font-size:13px;color:var(--accent);font-weight:800;margin-bottom:3px;}
+  .health-item .h-value{font-size:14.5px;font-weight:600;}
+  .health-item.warn{background:#fff6f6;}
+  .health-item.warn .h-label{color:var(--danger);}
+
+  /* ---------- QR & footer ---------- */
+  .qr-card{text-align:center;}
+  .qr-box{
+    width:150px;height:150px;margin:6px auto 10px;background:#fff;
+    border:1px solid #eee;padding:10px;border-radius:16px;
+    box-shadow:var(--shadow);
+  }
+  .qr-box svg{display:block;width:100%;height:100%;}
+  .qr-hint{font-size:13px;color:var(--muted);}
+
+  .brand-footer{
+    margin-top:26px;text-align:center;color:var(--muted);font-size:13px;line-height:1.9;
+  }
+  .brand-name{color:var(--primary-dark);font-weight:800;}
+  .cta-btn{
+    display:inline-block;margin-top:12px;padding:13px 34px;
+    background:linear-gradient(135deg,#ffb377,var(--primary));
+    color:#fff;font-weight:800;font-size:16px;border-radius:999px;
+    text-decoration:none;box-shadow:0 8px 18px rgba(255,138,61,.4);
+  }
+  .cta-btn:hover{background:linear-gradient(135deg,#ff9f55,var(--primary-dark));}
+
+  /* ---------- Toggle ---------- */
+  .toggle-row{
+    display:flex;align-items:center;justify-content:space-between;
+    background:#fff;border-radius:14px;box-shadow:var(--shadow);
+    padding:14px 18px;margin-top:22px;
+  }
+  .toggle-row .t-label{font-size:14px;font-weight:700;}
+  .toggle-row .t-sub{font-size:12px;color:var(--muted);}
+  .switch{position:relative;width:52px;height:28px;flex:none;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{
+    position:absolute;inset:0;background:#ccc;border-radius:999px;cursor:pointer;transition:.3s;
+  }
+  .slider::before{
+    content:"";position:absolute;width:22px;height:22px;border-radius:50%;
+    background:#fff;top:3px;left:3px;transition:.3s;box-shadow:0 2px 6px rgba(0,0,0,.2);
+  }
+  .switch input:checked + .slider{background:var(--danger);}
+  .switch input:checked + .slider::before{transform:translateX(24px);}
+
+  .privacy-tip{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;}
+
+  @media (max-width:400px){
+    .hero h1{font-size:22px;}
+    .info-table th{width:90px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="badge-qr">📌 數位身份證建檔方案 · QR Code 名牌配套</div>
+  <div class="avatar">🐕</div>
+  <h1>🐾 豆豆 DouDou 的專屬身分證</h1>
+  <div class="tags">
+    <span class="tag">赤柴</span>
+    <span class="tag">男孩 ♂</span>
+    <span class="tag">已絕育 ✂️</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= LOST BANNER ================= -->
+  <div class="card">
+    <div class="lost-banner" id="lostBanner">
+      <div class="lb-title">🚨 緊急求助：我走失了，請點擊聯繫我的主人！</div>
+      <div class="lb-sub" id="lostSub">主人已開啟走失模式，請立即協助聯繫，感謝您！</div>
+      <a class="call-btn" id="callBtn" href="tel:0912345678">📞 一鍵撥打：0912-345-678（陳小姐）</a>
+      <button class="lb-btn" onclick="toggleLost()">⚠️ 我是撿到豆豆的好心人，點此聯繫主人</button>
+    </div>
+    <div class="privacy-tip">🔒 隱私保護：平時隱藏完整電話號碼，走失模式下才公開聯繫方式</div>
+  </div>
+
+  <!-- ================= TOGGLE (demo of owner's backend) ================= -->
+  <div class="toggle-row">
+    <div>
+      <div class="t-label">🛡️ 走失模式開關</div>
+      <div class="t-sub">（主人後台功能 · 示範用）</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="lostToggle" onchange="toggleLost()">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- ================= BASIC INFO ================= -->
+  <section class="section">
+    <div class="sec-title">
+      <div class="icon" style="background:var(--primary-light);">📋</div>
+      <h2>基本萌檔案</h2>
+      <span class="en">Basic Info</span>
+    </div>
+    <div class="card" style="margin-top:0;">
+      <table class="info-table">
+        <tr><th>毛孩品種</th><td>柴犬（Shiba Inu）</td></tr>
+        <tr><th>出生日期</th><td>2022-05-20（4 歲）</td></tr>
+        <tr><th>毛色特徵</th><td>赤柴 / 胸前有白色 V 字領標記</td></tr>
+        <tr><th>晶片號碼</th><td class="chip-no">900215000123456</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= EMERGENCY CONTACTS ================= -->
+  <section class="section">
+    <div class="sec-title">
+      <div class="icon" style="background:var(--danger-light);">📞</div>
+      <h2>緊急聯繫與家長寄語</h2>
+      <span class="en">Emergency Contacts</span>
+    </div>
+    <div class="card" style="margin-top:0;">
+      <table class="info-table">
+        <tr><th>主要家長</th><td>陳小姐（Mommy）－ <span class="phone-masked">0912-345-678</span></td></tr>
+        <tr><th>備用聯絡</th><td>林先生－ <span class="phone-masked">0987-654-321</span></td></tr>
+        <tr><th>居住地區</th><td>台北市信義區 <span style="color:var(--muted);font-size:12.5px;font-weight:400;">（僅顯示區域，保護家長隱私）</span></td></tr>
+      </table>
+      <div class="note-box" style="margin-top:14px;">
+        <span class="quote-mark">💬 家長的話</span><br>
+        「豆豆是我們的寶貝，如果牠不小心走失了，請盡快聯繫我們，定有重謝！牠很親人但有點膽小，請溫柔對待牠。」
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HEALTH & CARE ================= -->
+  <section class="section">
+    <div class="sec-title">
+      <div class="icon" style="background:var(--accent-light);">💡</div>
+      <h2>健康與照顧須知</h2>
+      <span class="en">Health &amp; Care</span>
+    </div>
+    <div class="card" style="margin-top:0;">
+      <div class="health-grid">
+        <div class="health-item warn">
+          <div class="h-label">🍗 飲食與過敏</div>
+          <div class="h-value">對雞肉過敏，只吃鴨肉與鮭魚乾糧。</div>
+        </div>
+        <div class="health-item">
+          <div class="h-label">🐾 性格特徵</div>
+          <div class="h-value">貪吃、害怕雷聲與鞭炮聲、對陌生狗狗比較有防備心。</div>
+        </div>
+        <div class="health-item">
+          <div class="h-label">🏥 常去診所</div>
+          <div class="h-value">快樂動物醫院（02-2345-6789）</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= QR CODE ================= -->
+  <section class="section">
+    <div class="card qr-card" style="margin-top:0;">
+      <div class="sec-title" style="justify-content:center;">
+        <div class="icon" style="background:var(--primary-light);">🔳</div>
+        <h2>豆豆的專屬 QR Code</h2>
+      </div>
+      <div class="qr-box" id="qrcode"></div>
+      <div class="qr-hint">掃描名牌背面 QR Code 即可開啟本專頁<br>高解析度二維碼，支援雷射雕刻於金屬／木質名牌</div>
+    </div>
+  </section>
+
+  <!-- ================= BRAND FOOTER ================= -->
+  <footer class="brand-footer">
+    <div>本專屬身分證由 <span class="brand-name">[您的品牌名稱]</span> 提供支援 🏅</div>
+    <a class="cta-btn" href="#">🛒 訂製同款專屬名牌</a>
+    <div style="margin-top:20px;opacity:.7;">
+      本企劃方案由寵物名牌專屬顧問服務生成｜助力寵物品牌打造極致用戶體驗
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ---------- Lost Mode Toggle ---------- */
+function toggleLost(){
+  const t = document.getElementById('lostToggle');
+  const b = document.getElementById('lostBanner');
+  const active = t.checked;
+  b.classList.toggle('active', active);
+  document.getElementById('lostSub').textContent = active
+    ? '主人已開啟走失模式，請立即協助聯繫，感謝您！'
+    : '點擊下方按鈕，即可聯繫主人（需先驗證）';
+  // mask/unmask phone numbers
+  document.querySelectorAll('.phone-masked').forEach(el=>{
+    el.textContent = active ? el.dataset.full : el.dataset.mask;
+  });
+  if(active){ b.scrollIntoView({behavior:'smooth', block:'center'}); }
+}
+document.querySelectorAll('.phone-masked').forEach(el=>{
+  el.dataset.full = el.textContent;
+  el.dataset.mask = el.textContent.slice(0,4) + '-***-***';
+  el.textContent = el.dataset.mask;
+});
+
+/* ---------- QR Code (simple decorative pattern) ---------- */
+(function(){
+  const box = document.getElementById('qrcode');
+  const N = 21, cell = 100/N;
+  const finder = (x,y)=>(x<7&&y<7)||(x>=N-7&&y<7)||(x<7&&y>=N-7);
+  let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
+  s += '<rect width="100" height="100" fill="#fff"/>';
+  // pseudo-random data modules
+  let seed = 20220520;
+  const rnd = ()=>{ seed = (seed*9301+49297)%233280; return seed/233280; };
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    if(finder(x,y)) continue;
+    if(rnd()>0.55) s += `<rect x="${x*cell}" y="${y*cell}" width="${cell}" height="${cell}" fill="#3a3226"/>`;
+  }
+  // finder patterns
+  [[0,0],[N-7,0],[0,N-7]].forEach(([fx,fy])=>{
+    s += `<rect x="${fx*cell}" y="${fy*cell}" width="${7*cell}" height="${7*cell}" fill="#3a3226"/>`;
+    s += `<rect x="${(fx+1)*cell}" y="${(fy+1)*cell}" width="${5*cell}" height="${5*cell}" fill="#fff"/>`;
+    s += `<rect x="${(fx+2)*cell}" y="${(fy+2)*cell}" width="${3*cell}" height="${3*cell}" fill="#3a3226"/>`;
+  });
+  s += '</svg>';
+  box.innerHTML = s;
+})();
+</script>
+</body>
+</html>
